@@ -11,12 +11,23 @@
 // * Because of the way the simulator works you will likey need global variables
 // * You can define those here.
 // ***************************************************************************
+int ASeq;
+int BSeq;
+int AAck;
+int BAck;
+int ACount;
+int BCount;
+vector <struct pkt> ABuf;
+vector <struct pkt> BBuf;
 
 // ***************************************************************************
 // * The following routine will be called once (only) before any other
 // * entity A routines are called. You can use it to do any initialization
 // ***************************************************************************
 void A_init() {
+    ASeq = 0;
+    AAck = 0;
+    ACount = 0;
 }
 
 // ***************************************************************************
@@ -24,8 +35,10 @@ void A_init() {
 // * entity B routines are called. You can use it to do any initialization
 // ***************************************************************************
 void B_init() {
+    BSeq = 0;
+    BAck = 0;
+    BCount = 0;
 }
-
 
 // ***************************************************************************
 // * Called from layer 5, passed the data to be sent to other side 
@@ -70,18 +83,52 @@ int B_output(struct msg message) {
 void B_input(struct pkt packet) {
     std::cout << "Layer 4 on side B has recieved a packet from layer 3 sent over the network from side A:" << packet
               << std::endl;
-    struct msg message;
-    for(int i = 0; i < 20; i++){
-        message.data[i] = packet.payload[i];
-    }
-    int calcChecksum = FletcherChecksum(message.data);
-    if(calcChecksum==packet.checksum){
-        simulation->tolayer5(B,message);
-    }
-    else{
-        std::cout << "Checksum was " << packet.checksum << " calculated checksum was" << calcChecksum;
-    }
     
+    if(packet.checksum==0){
+        //Ack logic here
+        while(BBuf.size()>0){
+            if(BBuf.at(0).seqnum < packet.acknum){
+                BBuf.erase(BBuf.begin());
+            }
+            else{
+                break;
+            }
+        }
+
+        for(int i = 0; i < BBuf.size; i++){
+            simulation->tolayer3(BBuf.at(i));
+        }
+    }
+
+    else{
+        if(packet.seqnum == BAck){
+            struct msg message;
+            for(int i = 0; i < 20; i++){
+                message.data[i] = packet.payload[i];
+            }
+            int calcChecksum = FletcherChecksum(message.data);
+
+            std::cout << "Checksum was " << packet.checksum << " calculated checksum was " << calcChecksum;
+
+            if(calcChecksum==packet.checksum){
+                simulation->tolayer5(B,message);
+            }
+
+            BCount++;
+            BAck = packet.seqnum + 20;
+            if(BCount == 10){
+                struct pkt ackpack;
+                ackpack.acknum = packet.seqnum + 20;
+                ackpack.seqnum = packet.seqnum;
+                ackpack.checksum = 0;
+                ackpack.payload = "                    ";
+                simulation->tolayer3(A,ackpack);
+            }
+        }
+        else{
+            std::cout << "Expected sequence number was" << BAck << " recieved sequence number was " << packet.seqnum;
+        }
+    }
 }
 
 
