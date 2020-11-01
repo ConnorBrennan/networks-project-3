@@ -38,7 +38,7 @@ int A_output(struct msg message) {
     packet.acknum = 0;
     packet.checksum = 0;
     for(int i = 0; i < 20; i++){
-        packet.message[i] = message.data[i];
+        packet.payload[i] = message.data[i];
     }
     simulation->tolayer3(A,packet);
     return (1); /* Return a 0 to refuse the message */
@@ -72,7 +72,7 @@ void B_input(struct pkt packet) {
               << std::endl;
     struct msg message;
     for(int i = 0; i < 20; i++){
-        message.data[i] = packet.message[i];
+        message.data[i] = packet.payload[i];
     }
     simulation->tolayer5(B,message);
 }
