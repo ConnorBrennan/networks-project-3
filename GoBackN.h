@@ -7,3 +7,4 @@
 // * Any functions you want to add should be included here.
 // ***********************************************************
 struct pkt *make_pkt(int seq,int ack,struct msg *message);
+int FletcherChecksum(char* payload);
