@@ -36,7 +36,7 @@ int A_output(struct msg message) {
     struct pkt packet;
     packet.seqnum = 0;
     packet.acknum = 0;
-    packet.checksum = 0;
+    packet.checksum = FletcherChecksum(message.data);
     for(int i = 0; i < 20; i++){
         packet.payload[i] = message.data[i];
     }
@@ -90,4 +90,16 @@ void A_timerinterrupt() {
 // ***************************************************************************
 void B_timerinterrupt() {
     std::cout << "Side B's timer has gone off." << std::endl;
+}
+
+int FletcherChecksum(char* payload){
+    int sum1 = 0;
+    int sum2 = 0;
+
+    for(int i = 0; i<20; i++){
+        sum1 = (sum1 + payload[i]) % 255;
+        sum2 = (sum2 + sum1) % 255;
+    }
+
+    return (sum2*256) + sum1;
 }
