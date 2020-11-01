@@ -17,8 +17,8 @@ int AAck;
 int BAck;
 int ACount;
 int BCount;
-vector <struct pkt> ABuf;
-vector <struct pkt> BBuf;
+std::vector<struct pkt> ABuf;
+std::vector<struct pkt> BBuf;
 
 // ***************************************************************************
 // * The following routine will be called once (only) before any other
@@ -121,7 +121,7 @@ void B_input(struct pkt packet) {
                 ackpack.acknum = packet.seqnum + 20;
                 ackpack.seqnum = packet.seqnum;
                 ackpack.checksum = 0;
-                ackpack.payload = "                    ";
+                ackpack.payload = "                   ";
                 simulation->tolayer3(A,ackpack);
             }
         }
