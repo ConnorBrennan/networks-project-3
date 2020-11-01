@@ -95,8 +95,8 @@ void B_input(struct pkt packet) {
             }
         }
 
-        for(int i = 0; i < BBuf.size; i++){
-            simulation->tolayer3(BBuf.at(i));
+        for(int i = 0; i < BBuf.size(); i++){
+            simulation->tolayer3(B, BBuf.at(i));
         }
     }
 
@@ -121,7 +121,11 @@ void B_input(struct pkt packet) {
                 ackpack.acknum = packet.seqnum + 20;
                 ackpack.seqnum = packet.seqnum;
                 ackpack.checksum = 0;
-                ackpack.payload = "                   ";
+                
+                for(int i = 0; i < 20; i++){
+                    ackpack.payload[i] = " ";
+                }
+                
                 simulation->tolayer3(A,ackpack);
             }
         }
