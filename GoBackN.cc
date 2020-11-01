@@ -74,7 +74,14 @@ void B_input(struct pkt packet) {
     for(int i = 0; i < 20; i++){
         message.data[i] = packet.payload[i];
     }
-    simulation->tolayer5(B,message);
+    int calcChecksum = FletcherChecksum(message.data)
+    if(calcChecksum==packet.checksum){
+        simulation->tolayer5(B,message);
+    }
+    else{
+        cout << "Checksum was " << packet.checksum << " calculated checksum was" << calcChecksum;
+    }
+    
 }
 
 
