@@ -123,7 +123,7 @@ void B_input(struct pkt packet) {
                 ackpack.checksum = 0;
                 
                 for(int i = 0; i < 20; i++){
-                    ackpack.payload[i] = " ";
+                    ackpack.payload[i] = ' ';
                 }
                 
                 simulation->tolayer3(A,ackpack);
