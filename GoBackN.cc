@@ -83,7 +83,9 @@ void A_input(struct pkt packet) {
             }
         }
 
-        for(int i = 0; i < ABuf.size(); i++){
+        int ABufSize = ABuf.size();
+
+        for(int i = 0; i < ABufSize; i++){
             simulation->tolayer3(A, ABuf.at(i));
         }
     }
@@ -167,7 +169,11 @@ void B_input(struct pkt packet) {
             }
         }
 
-        for(int i = 0; i < BBuf.size(); i++){
+        int BBufSize = BBuf.size();
+
+        //BSeq = BBuf.at(0).seqnum;
+
+        for(int i = 0; i < BBufSize; i++){
             simulation->tolayer3(B, BBuf.at(i));
         }
     }
