@@ -74,7 +74,7 @@ int A_output(struct msg message) {
 // ***************************************************************************
 void A_input(struct pkt packet) {
     std::cout << "Layer 4 on side A has recieved a packet sent over the network from side B:" << packet << std::endl;
-
+    simulation->starttimer(A, 50);
     if(packet.seqnum == -1){
         simulation->stoptimer(A);
     }
@@ -179,6 +179,7 @@ int B_output(struct msg message) {
 void B_input(struct pkt packet) {
     std::cout << "Layer 4 on side B has recieved a packet from layer 3 sent over the network from side A:" << packet
               << std::endl;
+    simulation->starttimer(B, 50);
     if(packet.seqnum == -1){
         simulation->stoptimer(B);
     }
@@ -191,7 +192,7 @@ void B_input(struct pkt packet) {
             packet.seqnum = -1;
             packet.acknum = 0;
         }
-        
+
         //simulation->stoptimer(B);
         while(BBuf.size()>0){
             if(BBuf.at(0).seqnum < packet.acknum){
