@@ -110,7 +110,7 @@ void A_input(struct pkt packet) {
                     ackpack.payload[i] = ' ';
                 }
                 
-                simulation->tolayer3(B,ackpack);
+                simulation->tolayer3(A,ackpack);
             }
         }
         else{
@@ -191,7 +191,7 @@ void B_input(struct pkt packet) {
                     ackpack.payload[i] = ' ';
                 }
                 
-                simulation->tolayer3(A,ackpack);
+                simulation->tolayer3(B,ackpack);
             }
         }
         else{
