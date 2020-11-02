@@ -28,7 +28,7 @@ void A_init() {
     ASeq = 1;
     AAck = 1;
     ACount = 0;
-    simulation->starttimer(A, 5);
+    simulation->starttimer(A, 50);
 }
 
 // ***************************************************************************
@@ -39,7 +39,7 @@ void B_init() {
     BSeq = 1;
     BAck = 1;
     BCount = 0;
-    simulation->starttimer(B, 5);
+    simulation->starttimer(B, 50);
 }
 
 // ***************************************************************************
@@ -93,7 +93,7 @@ void A_input(struct pkt packet) {
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
             simulation->stoptimer(A);
-            simulation->starttimer(A, 5);
+            simulation->starttimer(A, 50);
         }
         
     }
@@ -187,7 +187,7 @@ void B_input(struct pkt packet) {
             std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
             simulation->stoptimer(B);
-            simulation->starttimer(B, 5);
+            simulation->starttimer(B, 50);
         }
         
     }
@@ -240,7 +240,7 @@ void A_timerinterrupt() {
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
             simulation->stoptimer(A);
-            simulation->starttimer(A, 5);
+            simulation->starttimer(A, 50);
         }
 }
 
@@ -258,7 +258,7 @@ void B_timerinterrupt() {
             std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
             simulation->stoptimer(B);
-            simulation->starttimer(B, 5);
+            simulation->starttimer(B, 50);
         }
 
     
