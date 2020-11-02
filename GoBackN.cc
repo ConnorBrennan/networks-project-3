@@ -118,8 +118,8 @@ void A_input(struct pkt packet) {
             
             if(ACount == 10){
                 struct pkt ackpack;
-                ackpack.acknum = packet.seqnum + 20;
-                ackpack.seqnum = packet.seqnum;
+                ackpack.acknum = AAck;
+                ackpack.seqnum = 0;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
@@ -213,8 +213,8 @@ void B_input(struct pkt packet) {
             
             if(BCount == 10){
                 struct pkt ackpack;
-                ackpack.acknum = packet.seqnum + 20;
-                ackpack.seqnum = packet.seqnum;
+                ackpack.acknum = BAck;
+                ackpack.seqnum = 0;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
@@ -245,8 +245,8 @@ void A_timerinterrupt() {
             simulation->starttimer(A, 50);
         }*/
         struct pkt ackpack;
-                ackpack.acknum = packet.seqnum + 20;
-                ackpack.seqnum = packet.seqnum;
+                ackpack.acknum = AAck;
+                ackpack.seqnum = 0;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
@@ -274,8 +274,8 @@ void B_timerinterrupt() {
         }*/
 
     struct pkt ackpack;
-                ackpack.acknum = packet.seqnum + 20;
-                ackpack.seqnum = packet.seqnum;
+                ackpack.acknum = BAck;
+                ackpack.seqnum = 0;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
