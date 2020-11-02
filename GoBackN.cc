@@ -59,9 +59,10 @@ int A_output(struct msg message) {
     for(int i = 0; i < 20; i++){
         packet.payload[i] = message.data[i];
     }
-    simulation->tolayer3(A,packet);
     ABuf.push_back(packet);
-
+    
+    simulation->tolayer3(A,packet);
+    
     ASeq+=20;
 
     return (1); /* Return a 0 to refuse the message */
@@ -99,6 +100,7 @@ void A_input(struct pkt packet) {
 
     else{
         if(packet.seqnum == AAck){
+            std::cout << "Correct packet recieved, seqnum " << packet.seqnum << std::endl;
             struct msg message;
             for(int i = 0; i < 20; i++){
                 message.data[i] = packet.payload[i];
@@ -193,6 +195,7 @@ void B_input(struct pkt packet) {
 
     else{
         if(packet.seqnum == BAck){
+            std::cout << "Correct packet recieved, seqnum " << packet.seqnum << std::endl;
             struct msg message;
             for(int i = 0; i < 20; i++){
                 message.data[i] = packet.payload[i];
