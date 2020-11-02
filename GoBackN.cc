@@ -46,6 +46,10 @@ void B_init() {
 int A_output(struct msg message) {
     std::cout << "Layer 4 on side A has recieved a message from the application that should be sent to side B: "
               << message << std::endl;
+
+    if(ABuf.size() >= 10){
+        return 0;
+    }
     struct pkt packet;
     packet.seqnum = ASeq;
     packet.acknum = 0;
@@ -127,6 +131,9 @@ int B_output(struct msg message) {
     std::cout << "Layer 4 on side B has recieved a message from the application that should be sent to side A: "
               << message << std::endl;
 
+    if(BBuf.size() >= 10){
+        return 0;
+    }
     struct pkt packet;
     packet.seqnum = BSeq;
     packet.acknum = 0;
