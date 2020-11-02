@@ -87,14 +87,14 @@ void A_input(struct pkt packet) {
             }
         }
 
-        /*int ABufSize = ABuf.size();
+        int ABufSize = ABuf.size();
 
         for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
             simulation->starttimer(A, 50);
         }
-        */
+        
     }
 
     else{
