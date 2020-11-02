@@ -82,35 +82,35 @@ void A_input(struct pkt packet) {
     else if(packet.checksum==-1){
         //Ack logic here
         //simulation->stoptimer(A);
-
-        //if buffer empty tell other side to stop timer
-        if(ABuf.size() == 0){
-            struct pkt timestopA;
-            timestopA.seqnum = -1;
-            timestopA.acknum = 0;
-            simulation->tolayer3(A, timestopA);
-        }
-
-        while(ABuf.size()>0){
-            if(ABuf.at(0).seqnum < packet.acknum){
-                ABuf.erase(ABuf.begin());
-                std::cout << "Erased acked item from abuffer" << std::endl;
+        if(packet.acknum==packet.seqnum){
+            //if buffer empty tell other side to stop timer
+            if(ABuf.size() == 0){
+                struct pkt timestopA;
+                timestopA.seqnum = -1;
+                timestopA.acknum = 0;
+                simulation->tolayer3(A, timestopA);
             }
-            else{
-                break;
+
+            while(ABuf.size()>0){
+                if(ABuf.at(0).seqnum < packet.acknum){
+                    ABuf.erase(ABuf.begin());
+                    std::cout << "Erased acked item from abuffer" << std::endl;
+                }
+                else{
+                    break;
+                }
+            }
+
+            std::cout << "A Buffer size is " << ABuf.size() << std::endl;
+
+            int ABufSize = ABuf.size();
+
+            for(int i = 0; i < ABufSize; i++){
+                std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
+                simulation->tolayer3(A, ABuf.at(i));
+                //simulation->starttimer(A, 50);
             }
         }
-
-        std::cout << "A Buffer size is " << ABuf.size() << std::endl;
-
-        int ABufSize = ABuf.size();
-
-        for(int i = 0; i < ABufSize; i++){
-            std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
-            simulation->tolayer3(A, ABuf.at(i));
-            //simulation->starttimer(A, 50);
-        }
-        
     }
 
     else{
@@ -137,7 +137,7 @@ void A_input(struct pkt packet) {
             if(ACount == 10){
                 struct pkt ackpack;
                 ackpack.acknum = AAck;
-                ackpack.seqnum = 0;
+                ackpack.seqnum = AAck;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
@@ -192,37 +192,37 @@ void B_input(struct pkt packet) {
 
     else if(packet.checksum==-1){
         //Ack logic here
-
-        if(BBuf.size() == 0){
-            struct pkt timestopB;
-            timestopB.seqnum = -1;
-            timestopB.acknum = 0;
-            simulation->tolayer3(B, timestopB);
-        }
-
-        //simulation->stoptimer(B);
-        while(BBuf.size()>0){
-            if(BBuf.at(0).seqnum < packet.acknum){
-                BBuf.erase(BBuf.begin());
-                std::cout << "Erased acked item from bbuffer" << std::endl;
+        if(packet.acknum==packet.seqnum){
+            if(BBuf.size() == 0){
+                struct pkt timestopB;
+                timestopB.seqnum = -1;
+                timestopB.acknum = 0;
+                simulation->tolayer3(B, timestopB);
             }
-            else{
-                break;
+
+            //simulation->stoptimer(B);
+            while(BBuf.size()>0){
+                if(BBuf.at(0).seqnum < packet.acknum){
+                    BBuf.erase(BBuf.begin());
+                    std::cout << "Erased acked item from bbuffer" << std::endl;
+                }
+                else{
+                    break;
+                }
+            }
+
+            std::cout << "B Buffer size is " << ABuf.size() << std::endl;
+
+            int BBufSize = BBuf.size();
+
+            //BSeq = BBuf.at(0).seqnum;
+
+            for(int i = 0; i < BBufSize; i++){
+                std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
+                simulation->tolayer3(B, BBuf.at(i));
+                //simulation->starttimer(B, 50);
             }
         }
-
-        std::cout << "B Buffer size is " << ABuf.size() << std::endl;
-
-        int BBufSize = BBuf.size();
-
-        //BSeq = BBuf.at(0).seqnum;
-
-        for(int i = 0; i < BBufSize; i++){
-            std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
-            simulation->tolayer3(B, BBuf.at(i));
-            //simulation->starttimer(B, 50);
-        }
-        
     }
 
     else{
@@ -249,7 +249,7 @@ void B_input(struct pkt packet) {
             if(BCount == 10){
                 struct pkt ackpack;
                 ackpack.acknum = BAck;
-                ackpack.seqnum = 0;
+                ackpack.seqnum = BAck;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
@@ -281,7 +281,7 @@ void A_timerinterrupt() {
         }*/
         struct pkt ackpack;
                 ackpack.acknum = AAck;
-                ackpack.seqnum = 0;
+                ackpack.seqnum = AAck;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
@@ -310,7 +310,7 @@ void B_timerinterrupt() {
 
     struct pkt ackpack;
                 ackpack.acknum = BAck;
-                ackpack.seqnum = 0;
+                ackpack.seqnum = BAck;
                 ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
