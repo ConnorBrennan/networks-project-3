@@ -242,7 +242,6 @@ void A_timerinterrupt() {
         for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
-            simulation->stoptimer(A);
             simulation->starttimer(A, 50);
         }
 }
