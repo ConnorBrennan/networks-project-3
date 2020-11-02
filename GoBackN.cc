@@ -54,7 +54,7 @@ int A_output(struct msg message) {
         packet.payload[i] = message.data[i];
     }
     simulation->tolayer3(A,packet);
-    ABuf.pushback(packet);
+    ABuf.push_back(packet);
 
     ASeq+=20;
 
@@ -135,7 +135,7 @@ int B_output(struct msg message) {
         packet.payload[i] = message.data[i];
     }
     simulation->tolayer3(B,packet);
-    BBuf.pushback(packet);
+    BBuf.push_back(packet);
 
     BSeq+=20;
 
