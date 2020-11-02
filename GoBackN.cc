@@ -25,8 +25,8 @@ std::vector<struct pkt> BBuf;
 // * entity A routines are called. You can use it to do any initialization
 // ***************************************************************************
 void A_init() {
-    ASeq = 0;
-    AAck = 0;
+    ASeq = 1;
+    AAck = 1;
     ACount = 0;
 }
 
@@ -35,8 +35,8 @@ void A_init() {
 // * entity B routines are called. You can use it to do any initialization
 // ***************************************************************************
 void B_init() {
-    BSeq = 0;
-    BAck = 0;
+    BSeq = 1;
+    BAck = 1;
     BCount = 0;
 }
 
@@ -47,13 +47,16 @@ int A_output(struct msg message) {
     std::cout << "Layer 4 on side A has recieved a message from the application that should be sent to side B: "
               << message << std::endl;
     struct pkt packet;
-    packet.seqnum = 0;
+    packet.seqnum = ASeq;
     packet.acknum = 0;
     packet.checksum = FletcherChecksum(message.data);
     for(int i = 0; i < 20; i++){
         packet.payload[i] = message.data[i];
     }
     simulation->tolayer3(A,packet);
+
+    ASeq+=20;
+
     return (1); /* Return a 0 to refuse the message */
 }
 
@@ -108,7 +111,7 @@ void B_input(struct pkt packet) {
             }
             int calcChecksum = FletcherChecksum(message.data);
 
-            std::cout << "Checksum was " << packet.checksum << " calculated checksum was " << calcChecksum;
+            std::cout << "Checksum was " << packet.checksum << " calculated checksum was " << calcChecksum << std::endl;
 
             if(calcChecksum==packet.checksum){
                 simulation->tolayer5(B,message);
@@ -130,7 +133,7 @@ void B_input(struct pkt packet) {
             }
         }
         else{
-            std::cout << "Expected sequence number was" << BAck << " recieved sequence number was " << packet.seqnum;
+            std::cout << "Expected sequence number was" << BAck << " recieved sequence number was " << packet.seqnum << std::endl;
         }
     }
 }
