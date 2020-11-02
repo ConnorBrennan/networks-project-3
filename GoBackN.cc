@@ -77,6 +77,7 @@ void A_input(struct pkt packet) {
         while(ABuf.size()>0){
             if(ABuf.at(0).seqnum < packet.acknum){
                 ABuf.erase(ABuf.begin());
+                std::cout << "Erased acked item from abuffer" << std::endl;
             }
             else{
                 break;
@@ -164,6 +165,7 @@ void B_input(struct pkt packet) {
         while(BBuf.size()>0){
             if(BBuf.at(0).seqnum < packet.acknum){
                 BBuf.erase(BBuf.begin());
+                std::cout << "Erased acked item from bbuffer" << std::endl;
             }
             else{
                 break;
