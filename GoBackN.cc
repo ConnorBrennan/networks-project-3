@@ -87,14 +87,14 @@ void A_input(struct pkt packet) {
             }
         }
 
-        int ABufSize = ABuf.size();
+        /*int ABufSize = ABuf.size();
 
         for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
             simulation->starttimer(A, 50);
         }
-        
+        */
     }
 
     else{
@@ -109,10 +109,11 @@ void A_input(struct pkt packet) {
 
             if(calcChecksum==packet.checksum){
                 simulation->tolayer5(A,message);
+                AAck = packet.seqnum + 20;
             }
 
             ACount++;
-            AAck = packet.seqnum + 20;
+            
             if(ACount == 10){
                 struct pkt ackpack;
                 ackpack.acknum = packet.seqnum + 20;
@@ -202,10 +203,11 @@ void B_input(struct pkt packet) {
 
             if(calcChecksum==packet.checksum){
                 simulation->tolayer5(B,message);
+                BAck = packet.seqnum + 20;
             }
 
             BCount++;
-            BAck = packet.seqnum + 20;
+            
             if(BCount == 10){
                 struct pkt ackpack;
                 ackpack.acknum = packet.seqnum + 20;
