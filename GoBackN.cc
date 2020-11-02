@@ -232,16 +232,6 @@ void B_input(struct pkt packet) {
 void A_timerinterrupt() {
     std::cout << "Side A's timer has gone off." << std::endl;
 
-    while(ABuf.size()>0){
-            if(ABuf.at(0).seqnum < packet.acknum){
-                ABuf.erase(ABuf.begin());
-                std::cout << "Erased acked item from abuffer" << std::endl;
-            }
-            else{
-                break;
-            }
-        }
-
         int ABufSize = ABuf.size();
 
         for(int i = 0; i < ABufSize; i++){
@@ -257,16 +247,6 @@ void A_timerinterrupt() {
 void B_timerinterrupt() {
     std::cout << "Side B's timer has gone off." << std::endl;
 
-    while(BBuf.size()>0){
-            if(BBuf.at(0).seqnum < packet.acknum){
-                BBuf.erase(BBuf.begin());
-                std::cout << "Erased acked item from bbuffer" << std::endl;
-            }
-            else{
-                break;
-            }
-        }
-
         int BBufSize = BBuf.size();
 
         //BSeq = BBuf.at(0).seqnum;
@@ -276,6 +256,8 @@ void B_timerinterrupt() {
             simulation->tolayer3(B, BBuf.at(i));
             simulation->starttimer(B, 5);
         }
+
+    
 }
 
 int FletcherChecksum(char* payload){
