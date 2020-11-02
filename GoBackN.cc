@@ -187,7 +187,7 @@ void B_input(struct pkt packet) {
     if(packet.checksum==-1){
         //Ack logic here
 
-        if(ABuf.size() == 0){
+        if(BBuf.size() == 0){
             struct pkt packet;
             packet.seqnum = -1;
             packet.acknum = 0;
