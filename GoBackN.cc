@@ -77,7 +77,7 @@ void A_input(struct pkt packet) {
 
     if(packet.checksum==-1){
         //Ack logic here
-        simulation->stoptimer(A);
+        //simulation->stoptimer(A);
         while(ABuf.size()>0){
             if(ABuf.at(0).seqnum < packet.acknum){
                 ABuf.erase(ABuf.begin());
@@ -93,7 +93,7 @@ void A_input(struct pkt packet) {
         for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
-            simulation->starttimer(A, 50);
+            //simulation->starttimer(A, 50);
         }
         
     }
@@ -170,7 +170,7 @@ void B_input(struct pkt packet) {
     
     if(packet.checksum==-1){
         //Ack logic here
-        simulation->stoptimer(B);
+        //simulation->stoptimer(B);
         while(BBuf.size()>0){
             if(BBuf.at(0).seqnum < packet.acknum){
                 BBuf.erase(BBuf.begin());
@@ -188,7 +188,7 @@ void B_input(struct pkt packet) {
         for(int i = 0; i < BBufSize; i++){
             std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
-            simulation->starttimer(B, 50);
+            //simulation->starttimer(B, 50);
         }
         
     }
@@ -239,11 +239,22 @@ void A_timerinterrupt() {
 
         int ABufSize = ABuf.size();
 
-        for(int i = 0; i < ABufSize; i++){
+        /*for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
             simulation->starttimer(A, 50);
-        }
+        }*/
+        struct pkt ackpack;
+                ackpack.acknum = packet.seqnum + 20;
+                ackpack.seqnum = packet.seqnum;
+                ackpack.checksum = -1;
+                
+                for(int i = 0; i < 20; i++){
+                    ackpack.payload[i] = ' ';
+                }
+                
+                simulation->tolayer3(A,ackpack);
+    simulation->starttimer(B, 50);
 }
 
 // ***************************************************************************
@@ -256,13 +267,23 @@ void B_timerinterrupt() {
 
         //BSeq = BBuf.at(0).seqnum;
 
-        for(int i = 0; i < BBufSize; i++){
+        /*for(int i = 0; i < BBufSize; i++){
             std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
             simulation->starttimer(B, 50);
-        }
+        }*/
 
-    
+    struct pkt ackpack;
+                ackpack.acknum = packet.seqnum + 20;
+                ackpack.seqnum = packet.seqnum;
+                ackpack.checksum = -1;
+                
+                for(int i = 0; i < 20; i++){
+                    ackpack.payload[i] = ' ';
+                }
+                
+                simulation->tolayer3(B,ackpack);
+    simulation->starttimer(B, 50);
 }
 
 int FletcherChecksum(char* payload){
