@@ -85,9 +85,10 @@ void A_input(struct pkt packet) {
 
         //if buffer empty tell other side to stop timer
         if(ABuf.size() == 0){
-            struct pkt timestop;
-            timestop.seqnum = -1;
-            timestop.acknum = 0;
+            struct pkt timestopA;
+            timestopA.seqnum = -1;
+            timestopA.acknum = 0;
+            simulation->tolayer3(A, timestopA);
         }
 
         while(ABuf.size()>0){
@@ -190,9 +191,10 @@ void B_input(struct pkt packet) {
         //Ack logic here
 
         if(BBuf.size() == 0){
-            struct pkt timestop;
-            timestop.seqnum = -1;
-            timestop.acknum = 0;
+            struct pkt timestopB;
+            timestopB.seqnum = -1;
+            timestopB.acknum = 0;
+            simulation->tolayer3(B, timestopB);
         }
 
         //simulation->stoptimer(B);
