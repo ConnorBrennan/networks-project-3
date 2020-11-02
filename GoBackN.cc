@@ -100,6 +100,8 @@ void A_input(struct pkt packet) {
             }
         }
 
+        std::cout << "A Buffer size is " << ABuf.size() << std::endl;
+
         int ABufSize = ABuf.size();
 
         for(int i = 0; i < ABufSize; i++){
@@ -203,6 +205,8 @@ void B_input(struct pkt packet) {
                 break;
             }
         }
+
+        std::cout << "B Buffer size is " << ABuf.size() << std::endl;
 
         int BBufSize = BBuf.size();
 
