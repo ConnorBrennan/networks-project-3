@@ -68,7 +68,7 @@ int A_output(struct msg message) {
 void A_input(struct pkt packet) {
     std::cout << "Layer 4 on side A has recieved a packet sent over the network from side B:" << packet << std::endl;
 
-    if(packet.checksum==0){
+    if(packet.checksum==-1){
         //Ack logic here
         while(ABuf.size()>0){
             if(ABuf.at(0).seqnum < packet.acknum){
@@ -104,7 +104,7 @@ void A_input(struct pkt packet) {
                 struct pkt ackpack;
                 ackpack.acknum = packet.seqnum + 20;
                 ackpack.seqnum = packet.seqnum;
-                ackpack.checksum = 0;
+                ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
                     ackpack.payload[i] = ' ';
@@ -149,7 +149,7 @@ void B_input(struct pkt packet) {
     std::cout << "Layer 4 on side B has recieved a packet from layer 3 sent over the network from side A:" << packet
               << std::endl;
     
-    if(packet.checksum==0){
+    if(packet.checksum==-1){
         //Ack logic here
         while(BBuf.size()>0){
             if(BBuf.at(0).seqnum < packet.acknum){
@@ -185,7 +185,7 @@ void B_input(struct pkt packet) {
                 struct pkt ackpack;
                 ackpack.acknum = packet.seqnum + 20;
                 ackpack.seqnum = packet.seqnum;
-                ackpack.checksum = 0;
+                ackpack.checksum = -1;
                 
                 for(int i = 0; i < 20; i++){
                     ackpack.payload[i] = ' ';
