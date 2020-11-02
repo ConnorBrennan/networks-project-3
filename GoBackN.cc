@@ -92,6 +92,7 @@ void A_input(struct pkt packet) {
         for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
+            simulation->stoptimer(A, 5);
             simulation->starttimer(A, 5);
         }
         
@@ -185,6 +186,7 @@ void B_input(struct pkt packet) {
         for(int i = 0; i < BBufSize; i++){
             std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
+            simulation->stoptimer(B, 5);
             simulation->starttimer(B, 5);
         }
         
@@ -237,6 +239,7 @@ void A_timerinterrupt() {
         for(int i = 0; i < ABufSize; i++){
             std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
+            simulation->stoptimer(A, 5);
             simulation->starttimer(A, 5);
         }
 }
@@ -254,6 +257,7 @@ void B_timerinterrupt() {
         for(int i = 0; i < BBufSize; i++){
             std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
+            simulation->stoptimer(B, 5);
             simulation->starttimer(B, 5);
         }
 
