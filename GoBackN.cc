@@ -79,7 +79,7 @@ void A_input(struct pkt packet) {
         simulation->stoptimer(A);
     }
 
-    if(packet.checksum==-1){
+    else if(packet.checksum==-1){
         //Ack logic here
         //simulation->stoptimer(A);
 
@@ -190,7 +190,7 @@ void B_input(struct pkt packet) {
         simulation->stoptimer(B);
     }
 
-    if(packet.checksum==-1){
+    else if(packet.checksum==-1){
         //Ack logic here
 
         if(BBuf.size() == 0){
