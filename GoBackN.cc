@@ -128,6 +128,9 @@ void A_input(struct pkt packet) {
                 simulation->tolayer5(A,message);
                 AAck = packet.seqnum + 20;
             }
+            else{
+                std::cout << "Invalid Checksum" << std::endl;
+            }
 
             ACount++;
             
@@ -236,6 +239,9 @@ void B_input(struct pkt packet) {
             if(calcChecksum==packet.checksum){
                 simulation->tolayer5(B,message);
                 BAck = packet.seqnum + 20;
+            }
+            else{
+                std::cout << "Invalid CHecksum" << std::endl;
             }
 
             BCount++;
