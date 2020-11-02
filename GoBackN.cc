@@ -85,9 +85,9 @@ void A_input(struct pkt packet) {
 
         //if buffer empty tell other side to stop timer
         if(ABuf.size() == 0){
-            struct pkt packet;
-            packet.seqnum = -1;
-            packet.acknum = 0;
+            struct pkt timestop;
+            timestop.seqnum = -1;
+            timestop.acknum = 0;
         }
 
         while(ABuf.size()>0){
@@ -188,9 +188,9 @@ void B_input(struct pkt packet) {
         //Ack logic here
 
         if(BBuf.size() == 0){
-            struct pkt packet;
-            packet.seqnum = -1;
-            packet.acknum = 0;
+            struct pkt timestop;
+            timestop.seqnum = -1;
+            timestop.acknum = 0;
         }
 
         //simulation->stoptimer(B);
