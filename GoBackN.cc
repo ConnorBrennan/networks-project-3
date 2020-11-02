@@ -54,6 +54,7 @@ int A_output(struct msg message) {
         packet.payload[i] = message.data[i];
     }
     simulation->tolayer3(A,packet);
+    ABuf.pushback(packet);
 
     ASeq+=20;
 
@@ -66,6 +67,56 @@ int A_output(struct msg message) {
 // ***************************************************************************
 void A_input(struct pkt packet) {
     std::cout << "Layer 4 on side A has recieved a packet sent over the network from side B:" << packet << std::endl;
+
+    if(packet.checksum==0){
+        //Ack logic here
+        while(ABuf.size()>0){
+            if(ABuf.at(0).seqnum < packet.acknum){
+                ABuf.erase(ABuf.begin());
+            }
+            else{
+                break;
+            }
+        }
+
+        for(int i = 0; i < ABuf.size(); i++){
+            simulation->tolayer3(A, ABuf.at(i));
+        }
+    }
+
+    else{
+        if(packet.seqnum == AAck){
+            struct msg message;
+            for(int i = 0; i < 20; i++){
+                message.data[i] = packet.payload[i];
+            }
+            int calcChecksum = FletcherChecksum(message.data);
+
+            std::cout << "Checksum was " << packet.checksum << " calculated checksum was " << calcChecksum << std::endl;
+
+            if(calcChecksum==packet.checksum){
+                simulation->tolayer5(A,message);
+            }
+
+            ACount++;
+            AAck = packet.seqnum + 20;
+            if(ACount == 10){
+                struct pkt ackpack;
+                ackpack.acknum = packet.seqnum + 20;
+                ackpack.seqnum = packet.seqnum;
+                ackpack.checksum = 0;
+                
+                for(int i = 0; i < 20; i++){
+                    ackpack.payload[i] = ' ';
+                }
+                
+                simulation->tolayer3(B,ackpack);
+            }
+        }
+        else{
+            std::cout << "Expected sequence number was" << AAck << " recieved sequence number was " << packet.seqnum << std::endl;
+        }
+    }
 }
 
 
@@ -76,8 +127,19 @@ int B_output(struct msg message) {
     std::cout << "Layer 4 on side B has recieved a message from the application that should be sent to side A: "
               << message << std::endl;
 
+    struct pkt packet;
+    packet.seqnum = BSeq;
+    packet.acknum = 0;
+    packet.checksum = FletcherChecksum(message.data);
+    for(int i = 0; i < 20; i++){
+        packet.payload[i] = message.data[i];
+    }
+    simulation->tolayer3(B,packet);
+    BBuf.pushback(packet);
+
+    BSeq+=20;
+
     return (1); /* Return a 0 to refuse the message */
-}
 
 
 // ***************************************************************************
