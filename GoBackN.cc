@@ -114,7 +114,7 @@ void A_input(struct pkt packet) {
 
             ACount++;
             AAck = packet.seqnum + 20;
-            if(ACount == 10){
+            if(ACount == 5){
                 struct pkt ackpack;
                 ackpack.acknum = packet.seqnum + 20;
                 ackpack.seqnum = packet.seqnum;
