@@ -86,7 +86,7 @@ void A_input(struct pkt packet) {
         int ABufSize = ABuf.size();
 
         for(int i = 0; i < ABufSize; i++){
-            std::cout << "Retransmitting packet " ABuf.at(i).seqnum << std::endl;
+            std::cout << "Retransmitting packet " << ABuf.at(i).seqnum << std::endl;
             simulation->tolayer3(A, ABuf.at(i));
         }
     }
@@ -175,7 +175,7 @@ void B_input(struct pkt packet) {
         //BSeq = BBuf.at(0).seqnum;
 
         for(int i = 0; i < BBufSize; i++){
-            std::cout << "Retransmitting packet " ABuf.at(i).seqnum << std::endl;
+            std::cout << "Retransmitting packet " << BBuf.at(i).seqnum << std::endl;
             simulation->tolayer3(B, BBuf.at(i));
         }
     }
