@@ -141,7 +141,7 @@ int B_output(struct msg message) {
 
     return (1); /* Return a 0 to refuse the message */
 
-
+}
 // ***************************************************************************
 // // called from layer 3, when a packet arrives for layer 4 on side B 
 // ***************************************************************************
